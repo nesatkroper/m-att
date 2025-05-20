@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:dreamflow/theme.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../models/attendance_record.dart';
 
@@ -59,7 +58,8 @@ class AttendanceSummaryCard extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: colorScheme.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
@@ -138,7 +138,7 @@ class AttendanceSummaryCard extends StatelessWidget {
     required Color color,
   }) {
     final theme = Theme.of(context);
-    
+
     return Expanded(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -186,9 +186,57 @@ class AttendanceSummaryCard extends StatelessWidget {
         gridData: const FlGridData(show: false),
         titlesData: FlTitlesData(
           show: true,
-          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles:
+              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles:
+              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          leftTitles:
+              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          // bottomTitles: AxisTitles(
+          //   sideTitles: SideTitles(
+          //     showTitles: true,
+          //     getTitlesWidget: (value, meta) {
+          //       const style = TextStyle(
+          //         color: Color(0xff7589a2),
+          //         fontWeight: FontWeight.w500,
+          //         fontSize: 12,
+          //       );
+          //       Widget text;
+          //       switch (value.toInt()) {
+          //         case 0:
+          //           text = const Text('M', style: style);
+          //           break;
+          //         case 1:
+          //           text = const Text('T', style: style);
+          //           break;
+          //         case 2:
+          //           text = const Text('W', style: style);
+          //           break;
+          //         case 3:
+          //           text = const Text('T', style: style);
+          //           break;
+          //         case 4:
+          //           text = const Text('F', style: style);
+          //           break;
+          //         case 5:
+          //           text = const Text('S', style: style);
+          //           break;
+          //         case 6:
+          //           text = const Text('S', style: style);
+          //           break;
+          //         default:
+          //           text = const Text('', style: style);
+          //           break;
+          //       }
+          //       return SideTitleWidget(
+          //         axisSide: meta.axisSide,
+          //         space: 16,
+          //         child: text,
+          //       );
+          //     },
+          //     reservedSize: 25,
+          //   ),
+          // ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
@@ -226,9 +274,9 @@ class AttendanceSummaryCard extends StatelessWidget {
                     break;
                 }
                 return SideTitleWidget(
-                  axisSide: meta.axisSide,
-                  space: 16,
                   child: text,
+                  meta: meta,
+                  space: 16,
                 );
               },
               reservedSize: 25,
@@ -252,7 +300,9 @@ class AttendanceSummaryCard extends StatelessWidget {
         barRods: [
           BarChartRodData(
             toY: attendanceData[index],
-            color: attendanceData[index] > 0 ? colorScheme.primary : colorScheme.error,
+            color: attendanceData[index] > 0
+                ? colorScheme.primary
+                : colorScheme.error,
             width: 20,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(6),
@@ -268,26 +318,28 @@ class AttendanceSummaryCard extends StatelessWidget {
     // This would ideally come from actual data
     // For now, we'll create some sample data based on the records
     final weekData = List<double>.filled(7, 0.0);
-    
+
     // Get current date and start of week
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    
+
     // Populate week data from records
     for (var record in records) {
       final day = record.checkInTime.weekday - 1; // 0 for Monday, 6 for Sunday
       if (day >= 0 && day < 7) {
         // Only count records from the current week
-        final recordDate = DateTime(record.checkInTime.year, record.checkInTime.month, record.checkInTime.day);
-        final weekStart = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+        final recordDate = DateTime(record.checkInTime.year,
+            record.checkInTime.month, record.checkInTime.day);
+        final weekStart =
+            DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
         final diff = recordDate.difference(weekStart).inDays;
-        
+
         if (diff >= 0 && diff < 7) {
           weekData[day] = record.status == 'absent' ? 0.0 : 1.0;
         }
       }
     }
-    
+
     return weekData;
   }
 
@@ -301,10 +353,11 @@ class AttendanceSummaryCard extends StatelessWidget {
 
     // Get records for the current month only
     final now = DateTime.now();
-    final currentMonthRecords = records.where((record) => 
-      record.checkInTime.year == now.year && 
-      record.checkInTime.month == now.month
-    ).toList();
+    final currentMonthRecords = records
+        .where((record) =>
+            record.checkInTime.year == now.year &&
+            record.checkInTime.month == now.month)
+        .toList();
 
     for (var record in currentMonthRecords) {
       if (record.status == 'absent') {
@@ -322,8 +375,18 @@ class AttendanceSummaryCard extends StatelessWidget {
 
   String _getCurrentMonthName() {
     final months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
     ];
     return months[DateTime.now().month - 1];
   }
