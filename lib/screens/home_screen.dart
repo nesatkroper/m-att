@@ -1661,8 +1661,7 @@ class HomeScreen extends HookWidget {
     ThemeData theme,
     ColorScheme colorScheme,
   ) {
-    final dateFormat =
-        (DateTime date) => '${date.day}/${date.month}/${date.year}';
+    dateFormat(DateTime date) => '${date.day}/${date.month}/${date.year}';
 
     // Determine status color and icon
     Color statusColor;

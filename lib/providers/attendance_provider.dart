@@ -246,7 +246,7 @@ class AttendanceProvider with ChangeNotifier {
       _error = 'Failed to submit leave request: ${e.toString()}';
       _isLoading = false;
       notifyListeners();
-      throw e; // Re-throw to be caught by the UI
+      rethrow; // Re-throw to be caught by the UI
     }
   }
 
