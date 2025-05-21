@@ -1,0 +1,2 @@
+D:/Personal Project/attendance/m-att/android/app/.cxx/RelWithDebInfo/6t1m4414/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/Personal Project/attendance/m-att/android/app/.cxx/RelWithDebInfo/6t1m4414/arm64-v8a/CMakeFiles/rebuild_cache.dir

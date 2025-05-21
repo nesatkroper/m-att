@@ -1,0 +1,2 @@
+D:/Personal Project/attendance/m-att/android/app/.cxx/Debug/2l6142e2/x86/CMakeFiles/edit_cache.dir
+D:/Personal Project/attendance/m-att/android/app/.cxx/Debug/2l6142e2/x86/CMakeFiles/rebuild_cache.dir

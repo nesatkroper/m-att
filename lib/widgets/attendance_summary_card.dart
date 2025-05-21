@@ -274,9 +274,9 @@ class AttendanceSummaryCard extends StatelessWidget {
                     break;
                 }
                 return SideTitleWidget(
-                  child: text,
                   meta: meta,
                   space: 16,
+                  child: text,
                 );
               },
               reservedSize: 25,
