@@ -11,8 +11,8 @@ class MockApiService {
     Employee(
       employeeId: '550e8400-e29b-41d4-a716-446655440001',
       employeeCode: 'EMP001',
-      firstName: 'John',
-      lastName: 'Doe',
+      firstName: 'Suong',
+      lastName: 'Phanun',
       gender: Gender.male,
       dob: DateTime(1990, 5, 15),
       phone: '+1234567890',
@@ -23,7 +23,8 @@ class MockApiService {
       status: Status.active,
       createdAt: DateTime(2020, 3, 10),
       updatedAt: DateTime.now(),
-      picture: 'https://randomuser.me/api/portraits/men/32.jpg',
+      picture:
+          'https://raw.githubusercontent.com/nesatkroper/img/refs/heads/main/phanunLogo.webp',
     ),
     Employee(
       employeeId: '550e8400-e29b-41d4-a716-446655440002',

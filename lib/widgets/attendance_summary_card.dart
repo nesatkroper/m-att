@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:attendance/models/attendance_record.dart';
+import '../models/attendance_record.dart';
 
 class AttendanceSummaryCard extends StatelessWidget {
   final List<AttendanceRecord> records;
@@ -301,9 +301,9 @@ class AttendanceSummaryCard extends StatelessWidget {
                     break;
                 }
                 return SideTitleWidget(
-                  child: text,
                   meta: meta, // Required meta parameter
                   space: 16,
+                  child: text,
                 );
               },
               reservedSize: 25,
@@ -352,11 +352,11 @@ class AttendanceSummaryCard extends StatelessWidget {
 
     // Populate week data from records
     for (var record in records) {
-      final day = record.checkInTime.weekday - 1; // 0 for Monday, 6 for Sunday
+      final day = record.checkIn.weekday - 1; // 0 for Monday, 6 for Sunday
       if (day >= 0 && day < 7) {
         // Only count records from the current week
-        final recordDate = DateTime(record.checkInTime.year,
-            record.checkInTime.month, record.checkInTime.day);
+        final recordDate = DateTime(
+            record.checkIn.year, record.checkIn.month, record.checkIn.day);
         final weekStart =
             DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
         final diff = recordDate.difference(weekStart).inDays;
@@ -382,8 +382,8 @@ class AttendanceSummaryCard extends StatelessWidget {
     final now = DateTime.now();
     final currentMonthRecords = records
         .where((record) =>
-            record.checkInTime.year == now.year &&
-            record.checkInTime.month == now.month)
+            record.checkIn.year == now.year &&
+            record.checkIn.month == now.month)
         .toList();
 
     for (var record in currentMonthRecords) {

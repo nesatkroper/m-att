@@ -21,8 +21,8 @@ class MonthlyCalendarView extends StatelessWidget {
 
     // Build map of attendance by day
     for (final record in records) {
-      final day = record.checkInTime.day;
-      attendanceByDay[day] = record.status;
+      final day = record.checkIn.day;
+      attendanceByDay[day] = record.status.toString();
     }
 
     // Get the first day of the month

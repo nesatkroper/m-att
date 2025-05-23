@@ -85,11 +85,12 @@ class ProfileDrawer extends StatelessWidget {
             CircleAvatar(
               radius: 36,
               backgroundColor: colorScheme.onPrimary.withOpacity(0.2),
-              backgroundImage: NetworkImage(employee.imageUrl),
+              backgroundImage: NetworkImage(employee.picture ??
+                  'https://raw.githubusercontent.com/nesatkroper/img/refs/heads/main/phanunLogo.webp'),
             ),
             const SizedBox(height: 16),
             Text(
-              employee.name,
+              employee.fullName,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
@@ -97,14 +98,14 @@ class ProfileDrawer extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              '${employee.position} • ${employee.department}',
+              '${employee.positionId} • ${employee.departmentId}',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: colorScheme.onPrimary.withOpacity(0.9),
                   ),
             ),
             const SizedBox(height: 4),
             Text(
-              'ID: ${employee.id}',
+              'ID: ${employee.employeeId}',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: colorScheme.onPrimary.withOpacity(0.8),
                   ),

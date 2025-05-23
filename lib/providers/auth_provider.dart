@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:attendance/models/employee.dart';
@@ -18,7 +20,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> checkAuthStatus() async {
     final prefs = await SharedPreferences.getInstance();
-    final savedEmployeeJson = prefs.getString('current_employee');
+    final savedEmployeeJson = prefs.getString('currentEmployee');
 
     if (savedEmployeeJson != null) {
       try {
@@ -26,12 +28,14 @@ class AuthProvider with ChangeNotifier {
         final result = await _apiService.validateToken();
         if (result) {
           // Load saved employee data
-          _currentEmployee = await _apiService.getCurrentEmployeeInfo();
+          // _currentEmployee = await _apiService.getCurrentEmployeeInfo();
+          _currentEmployee = Employee.fromJson(jsonDecode(savedEmployeeJson));
+
           _isAuthenticated = true;
         } else {
           _isAuthenticated = false;
           // Clear stored data if token is invalid
-          await prefs.remove('current_employee');
+          await prefs.remove('currentEmployee');
         }
       } catch (e) {
         _error = 'Session expired, please login again';
@@ -61,7 +65,9 @@ class AuthProvider with ChangeNotifier {
 
         // Save to shared preferences
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('employee_id', employeeId);
+        await prefs.setString(
+            'currentEmployee', jsonEncode(loginResult.toJson()));
+        await prefs.setString('employeeId', employeeId);
 
         _isLoading = false;
         notifyListeners();
@@ -92,7 +98,7 @@ class AuthProvider with ChangeNotifier {
 
       // Clear stored data
       final prefs = await SharedPreferences.getInstance();
-      await prefs.remove('employee_id');
+      await prefs.remove('employeeId');
 
       _currentEmployee = null;
       _isAuthenticated = false;

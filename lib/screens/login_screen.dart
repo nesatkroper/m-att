@@ -10,7 +10,7 @@ class LoginScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final employeeIdController =
-        useTextEditingController(text: 'EMP001'); // Pre-filled for demo
+        useTextEditingController(text: '550e8400-e29b-41d4-a716-446655440001');
     final passwordController = useTextEditingController();
     final isPasswordVisible = useState(false);
     final isSubmitting = useState(false);
