@@ -1,3 +1,4 @@
+import 'package:attendance/models/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,7 @@ class LeaveRequestScreen extends HookWidget {
     final colorScheme = theme.colorScheme;
 
     // Form controllers
-    final typeController = useState('sick'); // Default type
+    final typeController = useState(LeaveType.sick); // Default type
     final reasonController = useTextEditingController();
     final startDate = useState(DateTime.now());
     final endDate = useState(DateTime.now().add(const Duration(days: 1)));
@@ -84,7 +85,7 @@ class LeaveRequestScreen extends HookWidget {
 
       try {
         await attendanceProvider.submitLeaveRequest(
-          employeeId: authProvider.currentEmployee!.id,
+          employeeId: authProvider.currentEmployee!.employeeId,
           type: typeController.value,
           reason: reasonController.text.trim(),
           startDate: startDate.value,
@@ -168,7 +169,7 @@ class LeaveRequestScreen extends HookWidget {
                       final isSelected = typeController.value == type['value'];
                       return InkWell(
                         onTap: () {
-                          typeController.value = type['value'] as String;
+                          typeController.value = type['value'] as LeaveType;
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -212,10 +213,10 @@ class LeaveRequestScreen extends HookWidget {
                               ),
                               Radio<String>(
                                 value: type['value'] as String,
-                                groupValue: typeController.value,
+                                groupValue: typeController.value.toString(),
                                 onChanged: (value) {
                                   if (value != null) {
-                                    typeController.value = value;
+                                    typeController.value = value as LeaveType;
                                   }
                                 },
                                 activeColor: colorScheme.primary,

@@ -1,3 +1,4 @@
+import 'package:attendance/models/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance/models/attendance_record.dart';
 
@@ -28,16 +29,16 @@ class AttendanceStatusCard extends StatelessWidget {
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
       decoration: BoxDecoration(
-        color: _getStatusColor(record!.status, colorScheme).withOpacity(0.1),
+        color: _getStatusColor(record!.status.toString(), colorScheme).withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: _getStatusColor(record!.status, colorScheme).withOpacity(0.3),
+          color: _getStatusColor(record!.status.toString(), colorScheme).withOpacity(0.3),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
             color:
-                _getStatusColor(record!.status, colorScheme).withOpacity(0.1),
+                _getStatusColor(record!.status.toString(), colorScheme).withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -56,7 +57,7 @@ class AttendanceStatusCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              _buildStatusBadge(record!.status, colorScheme),
+              _buildStatusBadge(record!.status.toString(), colorScheme),
             ],
           ),
           const SizedBox(height: 16),
@@ -227,11 +228,11 @@ class AttendanceStatusCard extends StatelessWidget {
 
   Widget _buildTimeInfo(AttendanceRecord record, ThemeData theme) {
     final checkInTime = record.status != 'absent'
-        ? '${record.checkInTime.hour.toString().padLeft(2, '0')}:${record.checkInTime.minute.toString().padLeft(2, '0')}'
+        ? '${record.checkIn.hour.toString().padLeft(2, '0')}:${record.checkIn.minute.toString().padLeft(2, '0')}'
         : '--:--';
 
-    final checkOutTime = record.checkOutTime != null
-        ? '${record.checkOutTime!.hour.toString().padLeft(2, '0')}:${record.checkOutTime!.minute.toString().padLeft(2, '0')}'
+    final checkOut = record.checkOut != null
+        ? '${record.checkOut!.hour.toString().padLeft(2, '0')}:${record.checkOut!.minute.toString().padLeft(2, '0')}'
         : '--:--';
 
     return Row(
@@ -289,16 +290,16 @@ class AttendanceStatusCard extends StatelessWidget {
                     Icon(
                       Icons.access_time,
                       size: 18,
-                      color: record.checkOutTime != null
+                      color: record.checkOut != null
                           ? theme.colorScheme.primary
                           : theme.colorScheme.outline,
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      checkOutTime,
+                      checkOut,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: record.checkOutTime != null
+                        color: record.checkOut != null
                             ? theme.colorScheme.onSurface
                             : theme.colorScheme.onSurface.withOpacity(0.5),
                       ),
@@ -334,14 +335,14 @@ class AttendanceStatusCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: _getStatusInfoColor(record.status, colorScheme).withOpacity(0.1),
+        color: _getStatusInfoColor(record.status.toString(), colorScheme).withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
           Icon(
             icon,
-            color: _getStatusInfoColor(record.status, colorScheme),
+            color: _getStatusInfoColor(record.status.toString(), colorScheme),
             size: 20,
           ),
           const SizedBox(width: 12),
@@ -349,7 +350,7 @@ class AttendanceStatusCard extends StatelessWidget {
             child: Text(
               message,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: _getStatusInfoColor(record.status, colorScheme)
+                color: _getStatusInfoColor(record.status.toString(), colorScheme)
                     .withOpacity(0.8),
               ),
             ),
