@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:attendance/models/enum.dart';
 import 'package:uuid/uuid.dart';
 import '../models/employee.dart';
 import '../models/attendance_record.dart';
@@ -8,28 +9,91 @@ class MockApiService {
   // Sample employee data
   final List<Employee> _employees = [
     Employee(
-      id: 'EMP001',
-      name: 'John Doe',
-      department: 'Engineering',
-      position: 'Senior Developer',
-      imageUrl: 'https://randomuser.me/api/portraits/men/32.jpg',
+      employeeId: '550e8400-e29b-41d4-a716-446655440001',
+      employeeCode: 'EMP001',
+      firstName: 'John',
+      lastName: 'Doe',
+      gender: Gender.male,
+      dob: DateTime(1990, 5, 15),
+      phone: '+1234567890',
+      positionId: 'pos001',
+      departmentId: 'dept001',
+      salary: 7500.00,
+      hiredDate: DateTime(2020, 3, 10),
+      status: Status.active,
+      createdAt: DateTime(2020, 3, 10),
+      updatedAt: DateTime.now(),
+      picture: 'https://randomuser.me/api/portraits/men/32.jpg',
     ),
     Employee(
-      id: 'EMP002',
-      name: 'Jane Smith',
-      department: 'Design',
-      position: 'UI/UX Designer',
-      imageUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
+      employeeId: '550e8400-e29b-41d4-a716-446655440002',
+      employeeCode: 'EMP002',
+      firstName: 'Jane',
+      lastName: 'Smith',
+      gender: Gender.female,
+      dob: DateTime(1988, 8, 22),
+      phone: '+1987654321',
+      positionId: 'pos002',
+      departmentId: 'dept002',
+      salary: 6800.50,
+      hiredDate: DateTime(2019, 7, 15),
+      status: Status.active,
+      createdAt: DateTime(2019, 7, 15),
+      updatedAt: DateTime.now(),
+      picture: 'https://randomuser.me/api/portraits/women/44.jpg',
     ),
     Employee(
-      id: 'EMP003',
-      name: 'Robert Johnson',
-      department: 'Marketing',
-      position: 'Marketing Manager',
-      imageUrl: 'https://randomuser.me/api/portraits/men/46.jpg',
+      employeeId: '550e8400-e29b-41d4-a716-446655440003',
+      employeeCode: 'EMP003',
+      firstName: 'Robert',
+      lastName: 'Johnson',
+      gender: Gender.male,
+      dob: DateTime(1985, 11, 5),
+      phone: '+1122334455',
+      positionId: 'pos003',
+      departmentId: 'dept003',
+      salary: 9200.75,
+      hiredDate: DateTime(2018, 1, 20),
+      status: Status.active,
+      createdAt: DateTime(2018, 1, 20),
+      updatedAt: DateTime.now(),
+      picture: 'https://randomuser.me/api/portraits/men/46.jpg',
+    ),
+    Employee(
+      employeeId: '550e8400-e29b-41d4-a716-446655440004',
+      employeeCode: 'EMP004',
+      firstName: 'Emily',
+      lastName: 'Williams',
+      gender: Gender.female,
+      dob: DateTime(1992, 4, 30),
+      phone: '+1555666777',
+      positionId: 'pos004',
+      departmentId: 'dept001',
+      salary: 6200.00,
+      hiredDate: DateTime(2021, 9, 5),
+      status: Status.active,
+      createdAt: DateTime(2021, 9, 5),
+      updatedAt: DateTime.now(),
+      picture: 'https://randomuser.me/api/portraits/women/63.jpg',
+    ),
+    Employee(
+      employeeId: '550e8400-e29b-41d4-a716-446655440005',
+      employeeCode: 'EMP005',
+      firstName: 'Michael',
+      lastName: 'Brown',
+      gender: Gender.male,
+      dob: DateTime(1987, 7, 12),
+      phone: '+1444333222',
+      positionId: 'pos005',
+      departmentId: 'dept002',
+      salary: 8500.25,
+      hiredDate: DateTime(2022, 2, 18),
+      status: Status.inactive,
+      createdAt: DateTime(2022, 2, 18),
+      updatedAt: DateTime.now(),
+      picture: 'https://randomuser.me/api/portraits/men/71.jpg',
     ),
   ];
-
   // Sample attendance records
   final Map<String, List<AttendanceRecord>> _attendanceRecords = {};
 
@@ -47,8 +111,8 @@ class MockApiService {
 
     // Generate sample attendance records for the past 7 days
     for (final employee in _employees) {
-      _attendanceRecords[employee.id] = [];
-      _leaveRequests[employee.id] = [];
+      _attendanceRecords[employee.employeeId] = [];
+      _leaveRequests[employee.employeeId] = [];
 
       // Create records for the last 7 days
       for (int i = 6; i >= 0; i--) {
@@ -77,31 +141,38 @@ class MockApiService {
                 )
               : null;
 
-          _attendanceRecords[employee.id]!.add(
+          _attendanceRecords[employee.employeeId]!.add(
             AttendanceRecord(
-              id: uuid.v4(),
-              employeeId: employee.id,
-              checkInTime: checkInTime,
-              checkOutTime: checkOutTime,
-              status: hasCheckedOut ? 'checked-out' : 'checked-in',
-            ),
+                attendanceId: uuid.v4(),
+                employeeId: employee.employeeId,
+                eventId: "",
+                checkIn: checkInTime,
+                checkOut: checkOutTime,
+                method: "",
+                note: "",
+                status: hasCheckedOut ? Status.active : Status.inactive,
+                createdAt: DateTime.now(),
+                updatedAt: DateTime.now()),
           );
         } else {
-          // Absent record
-          _attendanceRecords[employee.id]!.add(
+          _attendanceRecords[employee.employeeId]!.add(
             AttendanceRecord(
-              id: uuid.v4(),
-              employeeId: employee.id,
-              checkInTime: DateTime(date.year, date.month, date.day),
-              checkOutTime: null,
-              status: 'absent',
-            ),
+                attendanceId: uuid.v4(),
+                employeeId: employee.employeeId,
+                eventId: "",
+                checkIn: DateTime(date.year, date.month, date.day),
+                checkOut: null,
+                method: "",
+                note: "",
+                status: Status.inactive,
+                createdAt: DateTime.now(),
+                updatedAt: DateTime.now()),
           );
         }
       }
 
       // Generate sample leave requests
-      _initializeSampleLeaveRequests(employee.id);
+      _initializeSampleLeaveRequests(employee.employeeId);
     }
   }
 
@@ -109,17 +180,27 @@ class MockApiService {
   Future<Employee?> login(String employeeId, String password) async {
     // For demo, accept any password but require valid employee ID
     final employee = _employees.firstWhere(
-      (emp) => emp.id == employeeId,
+      (emp) => emp.employeeId == employeeId,
       orElse: () => Employee(
-        id: '',
-        name: '',
-        department: '',
-        position: '',
-        imageUrl: '',
+        employeeId: '',
+        employeeCode: '',
+        firstName: '',
+        lastName: '',
+        gender: Gender.other,
+        dob: DateTime(1987, 7, 12),
+        phone: '',
+        positionId: '',
+        departmentId: '',
+        salary: 0,
+        hiredDate: DateTime(2022, 2, 18),
+        status: Status.inactive,
+        createdAt: DateTime(2022, 2, 18),
+        updatedAt: DateTime.now(),
+        picture: '',
       ),
     );
 
-    if (employee.id.isEmpty) {
+    if (employee.employeeId.isEmpty) {
       return null; // Employee not found
     }
 
@@ -150,14 +231,17 @@ class MockApiService {
 
     final record = _attendanceRecords[employeeId]!.lastWhere(
       (record) =>
-          record.checkInTime.year == todayDate.year &&
-          record.checkInTime.month == todayDate.month &&
-          record.checkInTime.day == todayDate.day,
+          record.checkIn.year == todayDate.year &&
+          record.checkIn.month == todayDate.month &&
+          record.checkIn.day == todayDate.day,
       orElse: () => AttendanceRecord(
-        id: Uuid().v4(),
+        attendanceId: Uuid().v4(),
         employeeId: employeeId,
-        checkInTime: todayDate,
-        status: 'absent',
+        eventId: '',
+        checkIn: todayDate,
+        status: Status.inactive,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       ),
     );
 
@@ -191,19 +275,22 @@ class MockApiService {
     if (existingRecord?.status == 'absent' || existingRecord == null) {
       // Create a check-in record
       final newRecord = AttendanceRecord(
-        id: uuid.v4(),
+        attendanceId: uuid.v4(),
         employeeId: employeeId,
-        checkInTime: today,
-        status: 'checked-in',
+        eventId: '',
+        checkIn: today,
+        status: Status.active,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       );
 
       // Update in the mock database
       if (_attendanceRecords.containsKey(employeeId)) {
         _attendanceRecords[employeeId]!.removeWhere(
           (record) =>
-              record.checkInTime.year == today.year &&
-              record.checkInTime.month == today.month &&
-              record.checkInTime.day == today.day,
+              record.checkIn.year == today.year &&
+              record.checkIn.month == today.month &&
+              record.checkIn.day == today.day,
         );
         _attendanceRecords[employeeId]!.add(newRecord);
       } else {
@@ -214,13 +301,13 @@ class MockApiService {
     } else if (existingRecord.status == 'checked-in') {
       // Update to checked-out
       final updatedRecord = existingRecord.copyWith(
-        checkOutTime: today,
-        status: 'checked-out',
+        checkOut: today,
+        status: Status.active,
       );
 
       // Update in the mock database
       final index = _attendanceRecords[employeeId]!.indexWhere(
-        (record) => record.id == existingRecord.id,
+        (record) => record.attendanceId == existingRecord.attendanceId,
       );
 
       if (index != -1) {

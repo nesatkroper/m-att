@@ -186,7 +186,7 @@ class LoginScreen extends HookWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              'Welcome Back!',
+                              'Welcome Back Nun!',
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge
