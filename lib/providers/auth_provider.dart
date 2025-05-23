@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../models/employee.dart';
-import '../services/mock_api_service.dart';
+import 'package:attendance/models/employee.dart';
+import 'package:attendance/services/mock_api_service.dart';
 
 class AuthProvider with ChangeNotifier {
   Employee? _currentEmployee;

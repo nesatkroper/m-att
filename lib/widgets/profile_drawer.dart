@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/employee.dart';
-import '../providers/auth_provider.dart';
-import '../providers/theme_provider.dart';
+import 'package:attendance/models/employee.dart';
+import 'package:attendance/providers/auth_provider.dart';
+import 'package:attendance/providers/theme_provider.dart';
 
 class ProfileDrawer extends StatelessWidget {
   const ProfileDrawer({super.key});

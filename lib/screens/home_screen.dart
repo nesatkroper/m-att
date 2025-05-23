@@ -1,18 +1,19 @@
+import 'package:attendance/models/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
-import '../providers/attendance_provider.dart';
-import '../providers/theme_provider.dart';
-import '../models/attendance_record.dart';
-import '../models/leave_request.dart';
-import '../widgets/attendance_status_card.dart';
-import '../widgets/attendance_summary_card.dart';
-import '../widgets/profile_drawer.dart';
-import '../widgets/monthly_calendar_view.dart';
-import '../screens/qr_scanner_screen.dart';
-import '../screens/login_screen.dart';
-import '../screens/leave_request_screen.dart';
+import 'package:attendance/providers/auth_provider.dart';
+import 'package:attendance/providers/attendance_provider.dart';
+import 'package:attendance/providers/theme_provider.dart';
+import 'package:attendance/models/attendance_record.dart';
+import 'package:attendance/models/leave_request.dart';
+import 'package:attendance/widgets/attendance_status_card.dart';
+import 'package:attendance/widgets/attendance_summary_card.dart';
+import 'package:attendance/widgets/profile_drawer.dart';
+import 'package:attendance/widgets/monthly_calendar_view.dart';
+import 'package:attendance/screens/qr_scanner_screen.dart';
+import 'package:attendance/screens/login_screen.dart';
+import 'package:attendance/screens/leave_request_screen.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({super.key});
@@ -34,9 +35,9 @@ class HomeScreen extends HookWidget {
       if (authProvider.currentEmployee != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           attendanceProvider
-              .loadAttendanceData(authProvider.currentEmployee!.id);
+              .loadAttendanceData(authProvider.currentEmployee!.employeeId);
           attendanceProvider
-              .loadLeaveRequests(authProvider.currentEmployee!.id);
+              .loadLeaveRequests(authProvider.currentEmployee!.employeeId);
         });
       }
       return null;
@@ -87,7 +88,7 @@ class HomeScreen extends HookWidget {
           result is String &&
           authProvider.currentEmployee != null) {
         await attendanceProvider.processQrScan(
-            result, authProvider.currentEmployee!.id);
+            result, authProvider.currentEmployee!.employeeId);
       }
     }
 
@@ -150,7 +151,7 @@ class HomeScreen extends HookWidget {
       }
 
       return RefreshIndicator(
-        onRefresh: () => attendanceProvider.loadAttendanceData(employee.id),
+        onRefresh: () => attendanceProvider.loadAttendanceData(employee.employeeId),
         color: colorScheme.primary,
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -161,7 +162,7 @@ class HomeScreen extends HookWidget {
                 CircleAvatar(
                   radius: 30,
                   backgroundColor: colorScheme.primary.withOpacity(0.2),
-                  backgroundImage: NetworkImage(employee.imageUrl),
+                  backgroundImage: NetworkImage(employee.picture ?? 'https://raw.githubusercontent.com/nesatkroper/img/refs/heads/main/phanunLogo.webp'),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -176,7 +177,7 @@ class HomeScreen extends HookWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        employee.name,
+                        employee.fullName,
                         style: theme.textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -229,7 +230,7 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                       Text(
-                        employee.id,
+                        employee.employeeId,
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -254,7 +255,7 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                       Text(
-                        employee.department,
+                        employee.departmentId,
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -279,7 +280,7 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                       Text(
-                        employee.position,
+                        employee.positionId,
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -360,7 +361,7 @@ class HomeScreen extends HookWidget {
 
                       if (result == true) {
                         // Reload leave requests if a new one was submitted
-                        attendanceProvider.loadLeaveRequests(employee.id);
+                        attendanceProvider.loadLeaveRequests(employee.employeeId);
                       }
                     },
                     icon: const Icon(Icons.note_add),
@@ -393,7 +394,7 @@ class HomeScreen extends HookWidget {
       final recentRecords = attendanceProvider.recentRecords;
 
       return RefreshIndicator(
-        onRefresh: () => attendanceProvider.loadAttendanceData(employee.id),
+        onRefresh: () => attendanceProvider.loadAttendanceData(employee.employeeId),
         color: colorScheme.primary,
         child: recentRecords.isEmpty
             ? Center(
@@ -458,7 +459,7 @@ class HomeScreen extends HookWidget {
       final leaveRequests = attendanceProvider.leaveRequests;
 
       return RefreshIndicator(
-        onRefresh: () => attendanceProvider.loadLeaveRequests(employee.id),
+        onRefresh: () => attendanceProvider.loadLeaveRequests(employee.employeeId),
         color: colorScheme.primary,
         child: Column(
           children: [
@@ -485,7 +486,7 @@ class HomeScreen extends HookWidget {
 
                       if (result == true) {
                         // Reload leave requests if a new one was submitted
-                        attendanceProvider.loadLeaveRequests(employee.id);
+                        attendanceProvider.loadLeaveRequests(employee.employeeId);
                       }
                     },
                     icon: const Icon(Icons.add),
@@ -771,17 +772,17 @@ class HomeScreen extends HookWidget {
     String statusText;
 
     switch (record.status) {
-      case 'checked-in':
+      case CheckStatus.checkin:
         statusColor = colorScheme.primary;
         statusIcon = Icons.login;
         statusText = 'Checked In';
         break;
-      case 'checked-out':
+      case CheckStatus.checkout:
         statusColor = colorScheme.secondary;
         statusIcon = Icons.logout;
         statusText = 'Checked Out';
         break;
-      case 'absent':
+      case CheckStatus.absent:
       default:
         statusColor = colorScheme.error;
         statusIcon = Icons.cancel_outlined;
@@ -789,12 +790,12 @@ class HomeScreen extends HookWidget {
         break;
     }
 
-    final formattedDate = formatDate(record.checkInTime);
+    final formattedDate = formatDate(record.checkIn);
     final checkInTime = record.status != 'absent'
-        ? '${record.checkInTime.hour.toString().padLeft(2, '0')}:${record.checkInTime.minute.toString().padLeft(2, '0')}'
+        ? '${record.checkIn.hour.toString().padLeft(2, '0')}:${record.checkIn.minute.toString().padLeft(2, '0')}'
         : '--:--';
-    final checkOutTime = record.checkOutTime != null
-        ? '${record.checkOutTime!.hour.toString().padLeft(2, '0')}:${record.checkOutTime!.minute.toString().padLeft(2, '0')}'
+    final checkOut = record.checkOut != null
+        ? '${record.checkOut!.hour.toString().padLeft(2, '0')}:${record.checkOut!.minute.toString().padLeft(2, '0')}'
         : '--:--';
 
     return Container(
@@ -926,16 +927,16 @@ class HomeScreen extends HookWidget {
                             Icon(
                               Icons.access_time,
                               size: 16,
-                              color: record.checkOutTime != null
+                              color: record.checkOut != null
                                   ? colorScheme.primary
                                   : colorScheme.outline,
                             ),
                             const SizedBox(width: 6),
                             Text(
-                              checkOutTime,
+                              checkOut,
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: record.checkOutTime != null
+                                color: record.checkOut != null
                                     ? colorScheme.onSurface
                                     : colorScheme.onSurface.withOpacity(0.4),
                               ),
@@ -967,17 +968,17 @@ class HomeScreen extends HookWidget {
     String statusText;
 
     switch (request.status) {
-      case 'approved':
+      case LeaveStatus.approved:
         statusColor = Colors.green;
         statusIcon = Icons.check_circle;
         statusText = 'Approved';
         break;
-      case 'rejected':
+      case LeaveStatus.rejected:
         statusColor = colorScheme.error;
         statusIcon = Icons.cancel;
         statusText = 'Rejected';
         break;
-      case 'pending':
+      case LeaveStatus.pending:
       default:
         statusColor = Colors.orange;
         statusIcon = Icons.hourglass_empty;
@@ -987,17 +988,17 @@ class HomeScreen extends HookWidget {
 
     // Determine leave type icon
     IconData typeIcon;
-    switch (request.type) {
-      case 'sick':
+    switch (request.leaveType) {
+      case LeaveType.sick:
         typeIcon = Icons.healing;
         break;
-      case 'vacation':
+      case LeaveType.annual:
         typeIcon = Icons.beach_access;
         break;
-      case 'personal':
+      case LeaveType.maternity:
         typeIcon = Icons.person;
         break;
-      case 'other':
+      case LeaveType.other:
       default:
         typeIcon = Icons.more_horiz;
         break;
@@ -1034,7 +1035,7 @@ class HomeScreen extends HookWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    '${request.type.substring(0, 1).toUpperCase()}${request.type.substring(1)} Leave',
+                    '${request.leaveType} Leave',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -1117,7 +1118,7 @@ class HomeScreen extends HookWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  request.reason,
+                  request.reason ?? "Annual",
                   style: theme.textTheme.bodyMedium,
                 ),
 
@@ -1125,7 +1126,7 @@ class HomeScreen extends HookWidget {
 
                 // Request date information
                 Text(
-                  'Requested on ${dateFormat(request.requestDate)}',
+                  'Requested on ${dateFormat(request.createdAt)}',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: colorScheme.onSurface.withOpacity(0.6),
                     fontStyle: FontStyle.italic,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/attendance_record.dart';
+import 'package:attendance/models/attendance_record.dart';
 
 class MonthlyCalendarView extends StatelessWidget {
   final List<AttendanceRecord> records;

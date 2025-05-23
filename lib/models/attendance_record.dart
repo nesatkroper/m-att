@@ -9,7 +9,7 @@ class AttendanceRecord {
   final DateTime? checkOut;
   final String? method;
   final String? note;
-  final Status status;
+  final CheckStatus status;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -42,7 +42,7 @@ class AttendanceRecord {
       checkOut: json['checkOut'] != null ? DateTime.parse(json['checkOut'] as String) : null,
       method: json['method'] as String?,
       note: json['note'] as String?,
-      status: json['status'] as Status,
+      status: json['status'] as CheckStatus,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['datetime'] as String),
     );
@@ -73,7 +73,7 @@ class AttendanceRecord {
     DateTime? checkOut,
     String? method,
     String? note,
-    Status? status,
+    CheckStatus? status,
     DateTime? createdAt,
     DateTime? datetime,
   }) {

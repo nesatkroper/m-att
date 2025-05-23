@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
-import '../providers/attendance_provider.dart';
+import 'package:attendance/providers/auth_provider.dart';
+import 'package:attendance/providers/attendance_provider.dart';
 
 class LeaveRequestScreen extends HookWidget {
   const LeaveRequestScreen({super.key});

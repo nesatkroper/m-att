@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import '../models/attendance_record.dart';
-import '../models/leave_request.dart';
-import '../services/mock_api_service.dart';
+import 'package:attendance/models/attendance_record.dart';
+import 'package:attendance/models/leave_request.dart';
+import '/services/mock_api_service.dart';
 
 class AttendanceProvider with ChangeNotifier {
   AttendanceRecord? _todayRecord;
@@ -161,8 +161,8 @@ class AttendanceProvider with ChangeNotifier {
     final now = DateTime.now();
     final monthRecords = _recentRecords
         .where((record) =>
-            record.checkInTime.year == now.year &&
-            record.checkInTime.month == now.month)
+            record.checkIn.year == now.year &&
+            record.checkIn.month == now.month)
         .toList();
 
     for (var record in monthRecords) {

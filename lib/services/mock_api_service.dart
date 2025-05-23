@@ -1,9 +1,9 @@
 import 'dart:math';
 import 'package:attendance/models/enum.dart';
 import 'package:uuid/uuid.dart';
-import '../models/employee.dart';
-import '../models/attendance_record.dart';
-import '../models/leave_request.dart';
+import 'package:attendance/models/employee.dart';
+import 'package:attendance/models/attendance_record.dart';
+import 'package:attendance/models/leave_request.dart';
 
 class MockApiService {
   // Sample employee data
@@ -150,7 +150,8 @@ class MockApiService {
                 checkOut: checkOutTime,
                 method: "",
                 note: "",
-                status: hasCheckedOut ? Status.active : Status.inactive,
+                status:
+                    hasCheckedOut ? CheckStatus.checkin : CheckStatus.checkout,
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now()),
           );
@@ -164,7 +165,7 @@ class MockApiService {
                 checkOut: null,
                 method: "",
                 note: "",
-                status: Status.inactive,
+                status: CheckStatus.checkout,
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now()),
           );
@@ -239,7 +240,7 @@ class MockApiService {
         employeeId: employeeId,
         eventId: '',
         checkIn: todayDate,
-        status: Status.inactive,
+        status: CheckStatus.checkout,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       ),
@@ -279,7 +280,7 @@ class MockApiService {
         employeeId: employeeId,
         eventId: '',
         checkIn: today,
-        status: Status.active,
+        status: CheckStatus.checkin,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );
@@ -302,7 +303,7 @@ class MockApiService {
       // Update to checked-out
       final updatedRecord = existingRecord.copyWith(
         checkOut: today,
-        status: Status.active,
+        status: CheckStatus.checkin,
       );
 
       // Update in the mock database
@@ -343,15 +344,16 @@ class MockApiService {
 
       // Create a leave request
       final leaveRequest = LeaveRequest(
-        id: uuid.v4(),
+        leaveId: uuid.v4(),
         employeeId: employeeId,
-        type: leaveTypes[random.nextInt(leaveTypes.length)],
+        leaveType: LeaveType.annual,
         startDate: startDate,
         endDate: endDate,
         reason: _generateRandomReason(
             leaveTypes[random.nextInt(leaveTypes.length)]),
-        status: statuses[random.nextInt(statuses.length)],
-        requestDate: requestDate,
+        status: LeaveStatus.pending,
+        createdAt: requestDate,
+        updatedAt: now,
       );
 
       _leaveRequests[employeeId]!.add(leaveRequest);
@@ -414,7 +416,7 @@ class MockApiService {
 
     // Sort by request date (newest first)
     final requests = List<LeaveRequest>.from(_leaveRequests[employeeId]!);
-    requests.sort((a, b) => b.requestDate.compareTo(a.requestDate));
+    requests.sort((a, b) => b.createdAt.compareTo(a.approvedAt ?? a.createdAt));
 
     return requests;
   }
@@ -422,7 +424,7 @@ class MockApiService {
   // Submit a new leave request
   Future<LeaveRequest?> submitLeaveRequest({
     required String employeeId,
-    required String type,
+    required LeaveType type,
     required String reason,
     required DateTime startDate,
     required DateTime endDate,
@@ -435,15 +437,15 @@ class MockApiService {
 
     // Create a new leave request
     final newRequest = LeaveRequest(
-      id: uuid.v4(),
-      employeeId: employeeId,
-      type: type,
-      startDate: startDate,
-      endDate: endDate,
-      reason: reason,
-      status: 'pending', // All new requests start as pending
-      requestDate: now,
-    );
+        leaveId: uuid.v4(),
+        employeeId: employeeId,
+        leaveType: type,
+        startDate: startDate,
+        endDate: endDate,
+        reason: reason,
+        status: LeaveStatus.approved, // All new requests start as pending
+        createdAt: now,
+        updatedAt: now);
 
     // Update in mock database
     if (_leaveRequests.containsKey(employeeId)) {

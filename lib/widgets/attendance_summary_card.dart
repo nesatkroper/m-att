@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../models/attendance_record.dart';
+import 'package:attendance/models/attendance_record.dart';
 
 class AttendanceSummaryCard extends StatelessWidget {
   final List<AttendanceRecord> records;

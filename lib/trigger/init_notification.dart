@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:attendance/main.dart';
 import 'package:attendance/screens/qr_scanner_screen.dart';
 import 'package:flutter/material.dart';
