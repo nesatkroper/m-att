@@ -1,3 +1,4 @@
+import 'package:attendance/models/enum.dart';
 import 'package:flutter/foundation.dart';
 import 'package:attendance/models/attendance_record.dart';
 import 'package:attendance/models/leave_request.dart';
@@ -113,7 +114,7 @@ class AttendanceProvider with ChangeNotifier {
 
   Future<void> submitLeaveRequest({
     required String employeeId,
-    required String type,
+    required LeaveType type,
     required String reason,
     required DateTime startDate,
     required DateTime endDate,
