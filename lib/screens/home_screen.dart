@@ -151,7 +151,8 @@ class HomeScreen extends HookWidget {
       }
 
       return RefreshIndicator(
-        onRefresh: () => attendanceProvider.loadAttendanceData(employee.employeeId),
+        onRefresh: () =>
+            attendanceProvider.loadAttendanceData(employee.employeeId),
         color: colorScheme.primary,
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -162,7 +163,8 @@ class HomeScreen extends HookWidget {
                 CircleAvatar(
                   radius: 30,
                   backgroundColor: colorScheme.primary.withOpacity(0.2),
-                  backgroundImage: NetworkImage(employee.picture ?? 'https://raw.githubusercontent.com/nesatkroper/img/refs/heads/main/phanunLogo.webp'),
+                  backgroundImage: NetworkImage(employee.picture ??
+                      'https://raw.githubusercontent.com/nesatkroper/img/refs/heads/main/phanunLogo.webp'),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -184,14 +186,6 @@ class HomeScreen extends HookWidget {
                       ),
                     ],
                   ),
-                ),
-                IconButton(
-                  onPressed: signOut,
-                  icon: Icon(
-                    Icons.logout,
-                    color: colorScheme.primary,
-                  ),
-                  tooltip: 'Sign Out',
                 ),
               ],
             ),
@@ -223,14 +217,14 @@ class HomeScreen extends HookWidget {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Employee ID',
+                          'Employee Code',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: colorScheme.onSurface.withOpacity(0.7),
                           ),
                         ),
                       ),
                       Text(
-                        employee.employeeId,
+                        employee.employeeCode ?? "Admin",
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -255,7 +249,7 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                       Text(
-                        employee.departmentId,
+                        employee.departmentId.toUpperCase(),
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -280,7 +274,7 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                       Text(
-                        employee.positionId,
+                        employee.positionId.toUpperCase(),
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -361,7 +355,8 @@ class HomeScreen extends HookWidget {
 
                       if (result == true) {
                         // Reload leave requests if a new one was submitted
-                        attendanceProvider.loadLeaveRequests(employee.employeeId);
+                        attendanceProvider
+                            .loadLeaveRequests(employee.employeeId);
                       }
                     },
                     icon: const Icon(Icons.note_add),
@@ -394,7 +389,8 @@ class HomeScreen extends HookWidget {
       final recentRecords = attendanceProvider.recentRecords;
 
       return RefreshIndicator(
-        onRefresh: () => attendanceProvider.loadAttendanceData(employee.employeeId),
+        onRefresh: () =>
+            attendanceProvider.loadAttendanceData(employee.employeeId),
         color: colorScheme.primary,
         child: recentRecords.isEmpty
             ? Center(
@@ -459,7 +455,8 @@ class HomeScreen extends HookWidget {
       final leaveRequests = attendanceProvider.leaveRequests;
 
       return RefreshIndicator(
-        onRefresh: () => attendanceProvider.loadLeaveRequests(employee.employeeId),
+        onRefresh: () =>
+            attendanceProvider.loadLeaveRequests(employee.employeeId),
         color: colorScheme.primary,
         child: Column(
           children: [
@@ -486,7 +483,8 @@ class HomeScreen extends HookWidget {
 
                       if (result == true) {
                         // Reload leave requests if a new one was submitted
-                        attendanceProvider.loadLeaveRequests(employee.employeeId);
+                        attendanceProvider
+                            .loadLeaveRequests(employee.employeeId);
                       }
                     },
                     icon: const Icon(Icons.add),

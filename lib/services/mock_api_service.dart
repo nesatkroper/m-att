@@ -10,14 +10,14 @@ class MockApiService {
   final List<Employee> _employees = [
     Employee(
       employeeId: '550e8400-e29b-41d4-a716-446655440001',
-      employeeCode: 'EMP001',
+      employeeCode: 'EMP-00001',
       firstName: 'Suong',
       lastName: 'Phanun',
       gender: Gender.male,
       dob: DateTime(1990, 5, 15),
       phone: '+1234567890',
-      positionId: 'pos001',
-      departmentId: 'dept001',
+      positionId: 'POS-0001',
+      departmentId: 'DEP-0001',
       salary: 7500.00,
       hiredDate: DateTime(2020, 3, 10),
       status: Status.active,
@@ -28,7 +28,7 @@ class MockApiService {
     ),
     Employee(
       employeeId: '550e8400-e29b-41d4-a716-446655440002',
-      employeeCode: 'EMP002',
+      employeeCode: 'EMP-00002',
       firstName: 'Jane',
       lastName: 'Smith',
       gender: Gender.female,
@@ -45,7 +45,7 @@ class MockApiService {
     ),
     Employee(
       employeeId: '550e8400-e29b-41d4-a716-446655440003',
-      employeeCode: 'EMP003',
+      employeeCode: 'EMP-00003',
       firstName: 'Robert',
       lastName: 'Johnson',
       gender: Gender.male,
@@ -62,7 +62,7 @@ class MockApiService {
     ),
     Employee(
       employeeId: '550e8400-e29b-41d4-a716-446655440004',
-      employeeCode: 'EMP004',
+      employeeCode: 'EMP-00004',
       firstName: 'Emily',
       lastName: 'Williams',
       gender: Gender.female,
@@ -79,7 +79,7 @@ class MockApiService {
     ),
     Employee(
       employeeId: '550e8400-e29b-41d4-a716-446655440005',
-      employeeCode: 'EMP005',
+      employeeCode: 'EMP-00005',
       firstName: 'Michael',
       lastName: 'Brown',
       gender: Gender.male,
@@ -179,10 +179,10 @@ class MockApiService {
   }
 
   // Simulate login API
-  Future<Employee?> login(String employeeId, String password) async {
+  Future<Employee?> login(String employeeCode, String password) async {
     // For demo, accept any password but require valid employee ID
     final employee = _employees.firstWhere(
-      (emp) => emp.employeeId == employeeId,
+      (emp) => emp.employeeCode == employeeCode,
       orElse: () => Employee(
         employeeId: '',
         employeeCode: '',
@@ -328,7 +328,6 @@ class MockApiService {
     final uuid = Uuid();
     final random = Random();
     final leaveTypes = ['sick', 'vacation', 'personal', 'other'];
-    final statuses = ['pending', 'approved', 'rejected'];
 
     // Generate between 0-3 leave requests
     final requestCount = random.nextInt(4);

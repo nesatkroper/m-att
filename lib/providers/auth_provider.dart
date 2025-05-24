@@ -20,9 +20,10 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> checkAuthStatus() async {
     final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     final savedEmployeeJson = prefs.getString('currentEmployee');
 
-    if (savedEmployeeJson != null) {
+    if (isLoggedIn && savedEmployeeJson != null) {
       try {
         // Simulate checking token validity with API
         final result = await _apiService.validateToken();
@@ -35,6 +36,7 @@ class AuthProvider with ChangeNotifier {
         } else {
           _isAuthenticated = false;
           // Clear stored data if token is invalid
+          await prefs.remove('employeeId');
           await prefs.remove('currentEmployee');
         }
       } catch (e) {
@@ -47,7 +49,7 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> login(String employeeId, String password) async {
+  Future<bool> login(String employeeCode, String password) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -57,7 +59,7 @@ class AuthProvider with ChangeNotifier {
       await Future.delayed(const Duration(seconds: 1));
 
       // Mock login logic (would be real API call in production)
-      final loginResult = await _apiService.login(employeeId, password);
+      final loginResult = await _apiService.login(employeeCode, password);
 
       if (loginResult != null) {
         _currentEmployee = loginResult;
@@ -65,9 +67,12 @@ class AuthProvider with ChangeNotifier {
 
         // Save to shared preferences
         final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString('employeeCode', employeeCode);
         await prefs.setString(
             'currentEmployee', jsonEncode(loginResult.toJson()));
-        await prefs.setString('employeeId', employeeId);
+        await prefs.setString(
+            'currentEmployee', jsonEncode(_currentEmployee!.toJson()));
 
         _isLoading = false;
         notifyListeners();
@@ -99,6 +104,7 @@ class AuthProvider with ChangeNotifier {
       // Clear stored data
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('employeeId');
+      await prefs.clear(); // remove all saved login data
 
       _currentEmployee = null;
       _isAuthenticated = false;
