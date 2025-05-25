@@ -9,8 +9,8 @@ class MockApiService {
   // Sample employee data
   final List<Employee> _employees = [
     Employee(
-      employeeId: '550e8400-e29b-41d4-a716-446655440001',
-      employeeCode: 'EMP-00001',
+      employeeId: '4a9c5dac-3362-4fb9-9154-03381fc91f8b',
+      employeeCode: 'EMP-4a9c5dac',
       firstName: 'Suong',
       lastName: 'Phanun',
       gender: Gender.male,
